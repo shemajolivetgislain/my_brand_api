@@ -1,5 +1,6 @@
 import Blog from "../model/blogs.js";
 import errorFunc from "../utils/errorFunc.js";
+import successMessage from "../utils/successMessage.js";
 
 class blogController {
   static async getBlogs(req, res) {
@@ -30,7 +31,6 @@ class blogController {
         });
       }
     } catch (error) {
-      console.log(error.message);
       const messageContent = error.message;
       const status = 500;
       errorFunc(res, messageContent, status);
@@ -38,18 +38,20 @@ class blogController {
   }
   static async createBlog(req, res) {
     try {
-      const { title, author, category, statuse, body } = req.body;
+      const { title, author, category, statuse, body, imageUrl } = req.body;
       const newBlog = await Blog.create({
         title,
         author,
         category,
         statuse,
         body,
+        imageUrl
       });
-      res.status(201).json({
-        message: "New blog created successfully",
-        data: newBlog,
-      });
+      const message = "New blog created successfully";
+      const data = newBlog;
+      const  status = 201;
+      successMessage(res, message, data,status);
+
     } catch (error) {
       const messageContent = error.message;
       const status = 500;

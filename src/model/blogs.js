@@ -17,10 +17,10 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-//   image: {
-//     type: String,
-//     required: true,
-//   },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
   statuse: {
     type: String,
     required: true,
@@ -29,8 +29,14 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  createdBy: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
-const Blog = mongoose.model("Blogq", blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
 export default Blog;

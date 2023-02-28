@@ -2,27 +2,73 @@ import bcrypt from "bcrypt";
 import User from "../model/user.js";
 import errorFunc from "../utils/errorFunc.js";
 
-const registerController = async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+class userController {
+  static async registerUser(req, res) {
+    const { username, email, password } = req.body;
+    try {
+      // hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    // create our new user
-    const newUser = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    res.status(201).json({
-      message: "New User created successfully",
-      data: newUser,
-    });
-  } catch (error) {
-    const messageContent = error.message;
-    const status = 500;
-    errorFunc(res, messageContent, status);
+      // create our new user
+      const newUser = await User.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+      res.status(201).json({
+        message: "Your account was created successfully",
+        data: { username: newUser.username, email:newUser.email, role: newUser.role },
+      });
+    } catch (error) {
+      if (error.code === 11000) {
+        return res
+          .status(403)
+          .json({ message: `This email ${email} was already Exist` });
+      }
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
   }
-};
 
-export default registerController;
+  static async getAllUsers(req, res) {
+    try {
+      const users = await User.find();
+      res.status(200).json({
+        message: "List of all users",
+        data: users,
+      });
+    } catch (error) {
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
+  }
+  // update user
+  static async updateUser(req, res) {
+    try {
+      const { id } = req.params;
+      const { username, email, role } = req.body;
+      const _id = id;
+      const userUpdate = await User.findByIdAndUpdate(
+        _id,
+        { username, email, role },
+        { new: true }
+      );
+      if (!userUpdate) {
+        return res
+          .status(404)
+          .json({ message: `User with this Id: ${_id} was not found` });
+      } else {
+        return res
+          .status(200)
+          .json({ message: "user updated successfully", data: userUpdate });
+      }
+    } catch (error) {
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
+  }
+}
+export default userController;

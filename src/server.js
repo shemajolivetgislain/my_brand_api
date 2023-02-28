@@ -36,6 +36,7 @@ const startServer = () => app.listen(port);
 
 Promise.all([con(), startServer()])
   .then(() => {
+    
     console.log(
       `MongoDB connected and server listening at http://${host}:${port}`
     );

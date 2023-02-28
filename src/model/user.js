@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
@@ -17,6 +16,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 6,
+  },
+  role: {
+    type: String,
+    default: "user",
+    enum: ["user", "admin"],
   },
   createdAt: {
     type: Date,
