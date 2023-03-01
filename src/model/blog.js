@@ -17,9 +17,8 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  imageUrl: {
+  image: {
     type: String,
-    required: true,
   },
   statuse: {
     type: String,
@@ -29,12 +28,6 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  createdBy: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

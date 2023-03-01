@@ -1,4 +1,4 @@
-import Contact from "../model/queries.js";
+import Contact from "../model/contact.js";
 import errorFunc from "../utils/errorFunc.js";
 
 class contactController {

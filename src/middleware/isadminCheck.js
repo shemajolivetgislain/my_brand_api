@@ -14,7 +14,6 @@ const userRestriction = async (req, res, next) => {
     // { userId: '63fbd140eb762f9f8e37ef23', iat: 1677491312 }
 
     const verifyToken = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(verifyToken);
     if (!verifyToken) {
       return res.status(401).json({ message: "invalid token" });
     } else {
