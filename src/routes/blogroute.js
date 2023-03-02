@@ -3,7 +3,10 @@ import blogController from "../controllers/blogcontrollers.js";
 import userRestriction from "../middleware/isadminCheck.js";
 import userVerification from "../middleware/isusercheck.js";
 import uploads from "../middleware/multer.middleware.js";
-
+import {
+  validateBlog,
+  validateUniqueBlog,
+} from "../middleware/validation/blogvalidation.js";
 const router = express.Router();
 
 router.get("/", blogController.getBlogs);

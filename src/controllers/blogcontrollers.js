@@ -23,14 +23,24 @@ class blogController {
   static async getBlogDetail(req, res) {
     try {
       const { id } = req.params; // using ES6
-      const blog = await Blog.findOne({ _id: id });
+      const blog = await Blog.findOne({ _id: id })
+        .populate("commentObjects")
+        .exec();
       if (!blog) {
         return res.status(404).json({
           message: `Blog with id: ${id} was not found`,
         });
       } else {
         return res.status(200).json({
-          data: blog,
+          data: {
+            title: blog.title,
+            author: blog.author,
+            category: blog.category,
+            statuse: blog.statuse,
+            body: blog.body,
+            image: blog.image,
+            comment: blog.commentObjects,
+          },
         });
       }
     } catch (error) {
