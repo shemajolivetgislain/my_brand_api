@@ -1,41 +1,40 @@
-import Joi from "joi";
-import User from "../database/models/authentication";
+import register from "../../model/user.js";
+import response from "../../utils/response.utils.js";
+import joi from "joi";
 
-const signUpSchema = Joi.object({
-  name: Joi.string().min(2).max(30).required(),
-  email: Joi.string().pattern(
-    new RegExp(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-    )
-  ),
-  password: Joi.string().pattern(
-    new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
-  ),
+const registerSchema = joi.object({
+  username: joi.string().required().messages({
+    "string.empty": "Please enter the username",
+    "any.required": "username field can not be empty",
+  }),
+  email: joi.string().email().required().messages({
+    "string.empty": "Email can not be empty",
+    "string.email": "Please provide valid email..",
+    "any.required": "Email is required",
+  }),
+
+  password: joi.string().min(6).max(300).required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+  confirmPassword: joi.string().min(6).max(300).required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
 });
 
-exports.validateSignUp = (req, res, next) => {
-  const { error, value } = signUpSchema.validate(req.body);
+const verifyEmailOrUsername = (req, res, next) => {
+  const { email, username } = req.body;
+  const { error } = registerSchema.validate(req.body);
   if (error) {
-    let errorMsg;
-    if (error.details[0].path[0] === "email") {
-      errorMsg = `Invalid email address`;
-    }
-    if (error.details[0].path[0] === "password") {
-      errorMsg = `weak password`;
-    } else {
-      errorMsg = error.details[0].message;
-    }
-    return res.status(400).send({ error: errorMsg });
+    const errorMessage = error.details
+      .map((detail) => detail.message)
+      .join(", ");
+    return response.error(res, 400, errorMessage);
   }
-  next();
+  register.findOne({ $or: [{ email }, { username }] }, (err, result) => {
+    if (err) {
+      return response.error(res, 500, err);
+    }
+    if (result) {
+      return response.error(res, 400, "username or email is already Exists");
+    }
+    next();
+  });
 };
 
-exports.validateUniqueUser = async (req, res, next) => {
-  const existingEmail = await User?.findOne({ email: req.body.email });
-  if (existingEmail) {
-    return res.status(409).send({
-      message: `User with ${existingEmail?.email} already exists`,
-    });
-  }
-  next();
-};
+export default verifyEmailOrUsername;

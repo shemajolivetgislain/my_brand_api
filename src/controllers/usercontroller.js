@@ -1,24 +1,38 @@
 import bcrypt from "bcrypt";
 import User from "../model/user.js";
 import errorFunc from "../utils/errorFunc.js";
+import response from "../utils/response.utils.js";
 
 class userController {
   static async registerUser(req, res) {
-    const { username, email, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
     try {
       // hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // create our new user
-      const newUser = await User.create({
-        username,
-        email,
-        password: hashedPassword,
-      });
-      res.status(201).json({
-        message: "Your account was created successfully",
-        data: { username: newUser.username, email:newUser.email, role: newUser.role },
-      });
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      let passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword);
+      if (passwordMatch) {
+        // create our new user
+        const newUser = await User.create({
+          username,
+          email,
+          password: passwordMatch,
+        });
+        res.status(201).json({
+          message: "account created successfully",
+          data: {
+            username: newUser.username,
+            email: newUser.email,
+            role: newUser.role,
+          },
+        });
+      } else {
+        response.error(
+          res,
+          400,
+          "password and confirm password does not match"
+        );
+      }
     } catch (error) {
       if (error.code === 11000) {
         return res
