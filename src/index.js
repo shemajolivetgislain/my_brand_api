@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import allRoutes from "./routes/allroutes.js";
 import response from "./utils/response.utils.js";
 
-mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", true);
 
 // configuring dotenv
 dotenv.config();
