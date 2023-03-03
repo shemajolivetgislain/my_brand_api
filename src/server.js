@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import allRoutes from "./routes/allroutes.js";
+import response from "./utils/response.utils.js"
 
 mongoose.set("strictQuery", false);
 
@@ -17,8 +18,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
-app.use("/api/", allRoutes);
+app.get("/", (req, res) =>
+  response.success(res, 200, "Welcome To My_brand Backend [API]")
+);
+app.use("/", allRoutes);
 
 // define some variables
 const port = process.env.PORT;
