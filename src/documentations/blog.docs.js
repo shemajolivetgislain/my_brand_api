@@ -61,7 +61,7 @@
  *                  200:
  *                      description: A blog retrieved successfully
  *
- * /blogs/update/{id}:
+ * /api/blogs/update/{id}:
  *      put:
  *              security:
  *                  - BearerToken: []
@@ -95,7 +95,7 @@
  *                      200:
  *                          description: A blog deleted successfully
  *
- * /blogs/delete/{id}:
+ * /api/blogs/delete/{id}:
  *      delete:
  *              security:
  *                  - BearerToken: []
