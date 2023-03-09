@@ -17,7 +17,7 @@ router.post(
   validateBlog,
   blogController.createBlog
 );
-router.put("/:id", userRestriction, blogController.updateBlog);
-router.delete("/:id", userRestriction, blogController.deleteBlog);
+router.put("/update/:id", userRestriction, blogController.updateBlog);
+router.delete("/delete/:id", userRestriction, blogController.deleteBlog);
 
 export default router;

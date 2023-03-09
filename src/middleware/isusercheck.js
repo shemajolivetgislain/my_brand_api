@@ -2,10 +2,15 @@ import jwt from "jsonwebtoken";
 const userVerification = async (req, res, next) => {
   // here is way to catch token provided into the header of the request
   const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({
+      message: "Authorization header missing",
+    });
+  }
   // here is grabbing token that are in header
   const token = authHeader.split(" ")[1];
 
-  if (!authHeader) {
+  if (!token) {
     return res.status(401).json({
       message: "no token provided",
     });
@@ -15,16 +20,18 @@ const userVerification = async (req, res, next) => {
 
     const verifyToken = jwt.verify(token, process.env.SECRET_KEY);
     console.log(verifyToken);
+
     if (!verifyToken) {
       return res.status(401).json({ message: "invalid token" });
     } else {
       // grabing user id from token
       const { role } = verifyToken;
-
-      if (role !== "user") {
+      console.log(role)
+      if (role === "admin" || role === "user") {
+        next();
+      }else{
         return res.status(403).json({ message: "UNAUTHORIZED" });
       }
-      next();
     }
   }
 };

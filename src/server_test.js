@@ -6,10 +6,6 @@ import mongoose from "mongoose";
 import allRoutes from "./routes/allroutes.js";
 import response from "./utils/response.utils.js";
 import cookieParser from "cookie-parser";
-import swaggerUI from "swagger-ui-express";
-import docs from "./documentations/index.js";
-
-
 mongoose.set("strictQuery", true);
 
 // configuring dotenv
@@ -26,14 +22,15 @@ app.use(bodyParser.json());
 app.get("/", (req, res) =>
   response.success(res, 200, "Welcome To My_brand Backend [API]")
 );
-// api documentation
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(docs));
 app.use(allRoutes);
 const port = process.env.PORT;
 mongoose.set("strictQuery", true);
 
-mongoose.connect(`${process.env.MONGODB_URL}`, {
+mongoose.connect(`${process.env.TEST_MONGODB_URL}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 app.listen(port);
+
+
+export default app;
