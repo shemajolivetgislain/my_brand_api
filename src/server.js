@@ -7,9 +7,7 @@ import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import allRoutes from "./routes/allroutes.js";
 import response from "./utils/response.utils.js"
-import swaggerDocs from "./documentation/index.js";
 import docs from "./documentations/index.js";
-import documentation from "./docs/swaggerOptions.js";
 mongoose.set("strictQuery", false);
 
 // configuring dotenv
