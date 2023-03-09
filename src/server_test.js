@@ -26,8 +26,11 @@ app.use(allRoutes);
 const port = process.env.PORT;
 mongoose.set("strictQuery", true);
 
-mongoose.connect(`${process.env.MONGODB_URL}`, {
+mongoose.connect(`${process.env.TEST_MONGODB_URL}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 app.listen(port);
+
+
+export default app;

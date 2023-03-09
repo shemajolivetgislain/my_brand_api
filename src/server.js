@@ -3,9 +3,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import swaggerUI from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
 import allRoutes from "./routes/allroutes.js";
 import response from "./utils/response.utils.js"
-
+import swaggerDocs from "./documentation/index.js";
+import docs from "./documentations/index.js";
+import documentation from "./docs/swaggerOptions.js";
 mongoose.set("strictQuery", false);
 
 // configuring dotenv
@@ -21,8 +25,11 @@ app.use(bodyParser.json());
 app.get("/", (req, res) =>
   response.success(res, 200, "Welcome To My_brand Backend [API]")
 );
-app.use("/", allRoutes);
+app.use("/api", allRoutes);
 
+// api documentation
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(docs));
+// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(documentation));
 // define some variables
 const port = process.env.PORT;
 const host = process.env.HOST;
@@ -45,3 +52,6 @@ Promise.all([con(), startServer()])
     );
   })
   .catch((err) => console.log(err));
+
+
+// module.exports = app;

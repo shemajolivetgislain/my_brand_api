@@ -2,10 +2,16 @@ import jwt from "jsonwebtoken";
 const userRestriction = async (req, res, next) => {
   // here is way to catch token provided into the header of the request
   const authHeader = req.headers.authorization;
-  // here is grabbing token that are in header
-  const token = authHeader.split(' ')[1];
-
   if (!authHeader) {
+    return res.status(401).json({
+      message: "Authorization header missing",
+    });
+  }
+
+  // here is grabbing token that are in header
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
     return res.status(401).json({
       message: "no token provided",
     });

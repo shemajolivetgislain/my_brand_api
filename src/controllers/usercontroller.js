@@ -16,7 +16,7 @@ class userController {
         const newUser = await User.create({
           username,
           email,
-          password: passwordMatch,
+          password: hashedPassword,
         });
         res.status(201).json({
           message: "account created successfully",
@@ -24,6 +24,7 @@ class userController {
             username: newUser.username,
             email: newUser.email,
             role: newUser.role,
+            password: newUser.password
           },
         });
       } else {
