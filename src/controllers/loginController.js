@@ -26,6 +26,8 @@ const loginController = async (req, res) => {
           process.env.SECRET_KEY
         );
         return res.status(200).json({
+          ok: true,
+          message: "login successful",
           token: token,
           data: { username: user.username, email: user.email, role: user.role},
         });
