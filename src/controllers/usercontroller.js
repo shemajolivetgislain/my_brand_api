@@ -19,12 +19,13 @@ class userController {
           password: hashedPassword,
         });
         res.status(201).json({
+          ok: true,
           message: "account created successfully",
           data: {
             username: newUser.username,
             email: newUser.email,
             role: newUser.role,
-            password: newUser.password
+            password: newUser.password,
           },
         });
       } else {

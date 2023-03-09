@@ -78,7 +78,7 @@ class blogController {
         });
         return res
           .status(201)
-          .json({ message: "New blog created successfully" });
+          .json({ ok: true, message: "New blog created successfully" });
       });
     } catch (error) {
       const messageContent = error.message;

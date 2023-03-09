@@ -19,6 +19,7 @@ static async createComment (req, res) {
     BlogPost.comments.push(NewComment);
     await BlogPost.save(function (error) {
       res.status(201).json({
+        ok: true,
         message: "New comment",
         data: BlogPost,
         commentId: NewComment,

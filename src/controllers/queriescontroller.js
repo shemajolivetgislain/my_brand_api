@@ -25,6 +25,7 @@ class contactController {
         content,
       });
       res.status(201).json({
+        ok: true,
         message: "New query created successfully",
         data: newQuery,
       });
