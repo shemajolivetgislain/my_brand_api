@@ -28,7 +28,7 @@ app.get("/", (req, res) =>
 );
 // api documentation
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(docs));
-app.use(allRoutes);
+app.use("/api", allRoutes);
 const port = process.env.PORT;
 mongoose.set("strictQuery", true);
 
