@@ -5,14 +5,13 @@ import userVerification from "../middleware/isusercheck.js";
 import uploads from "../middleware/multer.middleware.js";
 import validateBlog from "../middleware/validation/blogvalidation.js";
 
-
 const router = express.Router();
 
 router.get("/", blogController.getBlogs);
 router.get("/:id", blogController.getBlogDetail);
 router.post(
   "/",
-  userRestriction,
+  userVerification,
   uploads.single("image"),
   validateBlog,
   blogController.createBlog
