@@ -17,7 +17,7 @@ const blogSchema = Joi.object({
         'string.statuse': 'Please provide valid statuse..',
         'any.required': 'Status is required'
     }),
-  body: Joi.string().min(100).max(1000).required().messages({
+  body: Joi.string().min(10).max(1000).required().messages({
         'string.empty': 'Body can not be empty',
         'string.body': 'Please provide valid body..',
         'any.required': 'Body is required'

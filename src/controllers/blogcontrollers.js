@@ -1,10 +1,13 @@
 import Blog from "../model/blog.js";
 import errorFunc from "../utils/errorFunc.js";
 import successMessage from "../utils/successMessage.js";
-import jwt from "jsonwebtoken";
+import response from "../utils/response.utils.js";
 import dotenv from "dotenv";
-import cloudinary from "cloudinary";
-
+import { v2 as cloudinary } from "cloudinary";
+import multer from "multer";
+// import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import jwt from "jsonwebtoken";
 class blogController {
   static async getBlogs(req, res) {
     try {
@@ -55,37 +58,85 @@ class blogController {
     const token = authHeader.split(" ")[1];
     const verifyToken = jwt.verify(token, process.env.SECRET_KEY);
     const { username } = verifyToken;
-    dotenv.config();
     cloudinary.config({
-      cloud_name: `${process.env.CLOUD_NAME}`,
-      api_key: `${process.env.API_KEYD}`,
-      api_secret: `${process.env.API_SECRET}`,
+      cloud_name: "dja5pnddu",
+      api_key: "762757296578451",
+      api_secret: "p1MbWpXuz3imxfVlYpBM34mYIDU",
     });
-
     try {
-      const { title, category, statuse, body } = req.body;
-      cloudinary.uploader.upload(req.file.path, async (result, err) => {
-        if (!result) {
-          return response.error(res, 500, err);
+      const storage = new CloudinaryStorage({
+        cloudinary,
+        params: {
+          folder: "blogs-image",
+          allowed_formats: ["jpg", "png"],
+        },
+      });
+      const upload = multer({ storage }).single("image");
+      upload(req, res, async (err) => {
+        if (err) {
+          return console.log(err);
         }
+        const { title, category, statuse, body } = req.body;
         const newBlog = await Blog.create({
-          title,
           author: username,
+          title,
           category,
           statuse,
+          image: req.file.path,
           body,
-          image: result.url,
         });
-        return res
-          .status(201)
-          .json({ ok: true, message: "New blog created successfully" });
+        response.success(res, 200, "blog created successfuly", newBlog);
       });
     } catch (error) {
-      const messageContent = error.message;
-      const status = 500;
-      errorFunc(res, messageContent, status);
+      console.log(error);
+      return response.error(res, 500, "internal server error");
     }
   }
+  // static async createBlog(req, res) {
+  //   // here is grabbing token that are in header
+  //   const authHeader = req.headers.authorization;
+  //   const token = authHeader.split(" ")[1];
+  //   const verifyToken = jwt.verify(token, process.env.SECRET_KEY);
+  //   const { username } = verifyToken;
+  //   dotenv.config();
+  //   cloudinary.config({
+  //     cloud_name: "dja5pnddu",
+  //     api_key: "762757296578451",
+  //     api_secret: "p1MbWpXuz3imxfVlYpBM34mYIDU",
+  //   });
+
+  //   try {
+  //     const storage = new CloudinaryStorage({
+  //       cloudinary,
+  //       params: {
+  //         folder: "blogs-image",
+  //         allowed_formats: ["jpg", "png"],
+  //       },
+  //     });
+  //     const upload = multer({ storage }).single("image");
+  //     upload(req, res, async (err) => {
+  //       if (err) {
+  //         return console.log(err);
+  //       }
+  //       const { title, category, statuse, body } = req.body;
+  //       const newBlog = await Blog.create({
+  //         title,
+  //         author: username,
+  //         category,
+  //         statuse,
+  //         image: req.file.path,
+  //         body,
+  //       });
+  //       return res
+  //         .status(201)
+  //         .json({ ok: true, message: "New blog created successfully" });
+  //     });
+  //   } catch (error) {
+  //     const messageContent = error.message;
+  //     const status = 500;
+  //     errorFunc(res, messageContent, status);
+  //   }
+  // }
 
   static async updateBlog(req, res) {
     try {

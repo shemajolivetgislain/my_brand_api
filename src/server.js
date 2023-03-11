@@ -8,7 +8,7 @@ import swaggerJsDoc from "swagger-jsdoc";
 import allRoutes from "./routes/allroutes.js";
 import response from "./utils/response.utils.js"
 import docs from "./documentations/index.js";
-mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", true);
 
 // configuring dotenv
 dotenv.config();
