@@ -5,6 +5,12 @@ const commentSchema = new Schema({
   fullName: {
     type: String,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+  },
   comment: {
     type: String,
     required: [true, "field is required"],
