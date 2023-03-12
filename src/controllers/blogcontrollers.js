@@ -77,14 +77,17 @@ class blogController {
         if (err) {
           return console.log(err);
         }
-        const { title, category, statuse, body } = req.body;
+        const { title, category, statuse, body, image } = req.body;
+        // var result = await cloudinary.uploader.upload(req.file.path);
         const newBlog = await Blog.create({
           author: username,
           title,
           category,
           statuse,
-          image: req.file ? req.file.path : null,
-          body
+          // image: req.file ? req.file.path : null,
+          image,
+          // image: result.url,
+          body,
         });
         response.success(res, 200, "blog created successfuly", newBlog);
       });
