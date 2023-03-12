@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import allRoutes from "./routes/allroutes.js";
-import response from "./utils/response.utils.js"
+import response from "./utils/response.utils.js";
 import docs from "./documentations/index.js";
 mongoose.set("strictQuery", true);
 
@@ -18,7 +18,10 @@ const app = express();
 
 // use of cors and body parse
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+// Increase the size limit to 50 MB
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.get("/", (req, res) =>
   response.success(res, 200, "Welcome To My_brand Backend [API]")
@@ -33,23 +36,27 @@ const port = process.env.PORT;
 const host = process.env.HOST;
 
 // database connection instance
-const con = () =>
-  mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+// const con = () =>
+//   mongoose.connect(process.env.MONGODB_URL, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   });
 
 // instance to listen to our server
-const startServer = () => app.listen(port);
+// const startServer = () => app.listen(port);
 
-Promise.all([con(), startServer()])
-  .then(() => {
-    
-    console.log(
-      `MongoDB connected and server listening at http://${host}:${port}`
-    );
-  })
-  .catch((err) => console.log(err));
+// Promise.all([con(), startServer()])
+//   .then(() => {
 
+//     console.log(
+//       `MongoDB connected and server listening at http://${host}:${port}`
+//     );
+//   })
+//   .catch((err) => console.log(err));
 
-// module.exports = app;
+mongoose.connect(`${process.env.MONGODB_URL}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+app.listen(port);
+console.log(`the server is listening at http://localhost:${port}/api-docs`);

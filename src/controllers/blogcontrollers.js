@@ -40,6 +40,7 @@ class blogController {
             author: blog.author,
             category: blog.category,
             statuse: blog.statuse,
+            createdAt: blog.createdAt,
             body: blog.body,
             image: blog.image,
             comment: blog.commentObjects,
@@ -82,8 +83,8 @@ class blogController {
           title,
           category,
           statuse,
-          image: req.file.path,
-          body,
+          image: req.file ? req.file.path : null,
+          body
         });
         response.success(res, 200, "blog created successfuly", newBlog);
       });
