@@ -8,5 +8,5 @@ const router = express.Router();
 router.post("/", verifyRegister, userController.registerUser);
 router.get("/", isadminCheck, userController.getAllUsers);
 router.put("/:id", isadminCheck, userController.updateUser);
-
+router.put("/:id", isadminCheck, userController.deleteUser);
 export default router;
