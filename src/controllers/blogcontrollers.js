@@ -147,13 +147,13 @@ class blogController {
       const { id } = req.params; // using ES6
 
       // body to be update
-      const { title, author, category, statuse, body } = req.body;
+      const { title, author, category, statuse, body, image } = req.body;
 
       // id
       const _id = id;
       const blogUpdated = await Blog.findByIdAndUpdate(
         _id,
-        { title, author, category, statuse, body },
+        { title, author, category, statuse, body, image },
         { new: true }
       );
 
