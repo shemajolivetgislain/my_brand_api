@@ -89,7 +89,7 @@ class userController {
   static async deleteUser(req, res) {
     try {
       const { id } = req.params;
-      // find blog
+      // find user
 
       const _id = id;
 
@@ -102,6 +102,26 @@ class userController {
       } else {
         return res.status(200).json({
           message: "User deleted successfully",
+        });
+      }
+    } catch (error) {
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
+  }
+  // get one user
+  static async getUserDetail(req, res) {
+    try {
+      const { id } = req.params; // using ES6
+      const user = await User.findOne({ _id: id });
+      if (!user) {
+        return res.status(404).json({
+          message: `User with id: ${id} was not found`,
+        });
+      } else {
+        return res.status(200).json({
+          data: user,
         });
       }
     } catch (error) {
