@@ -7,6 +7,7 @@ class contactController {
       const queries = await Contact.find();
       res.status(200).json({
         data: queries,
+        count: queries.length,
       });
     } catch (error) {
       const messageContent = error.message;

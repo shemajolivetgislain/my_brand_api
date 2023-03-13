@@ -7,6 +7,8 @@ import validateBlog from "../middleware/validation/blogvalidation.js";
 const router = express.Router();
 
 router.get("/", blogController.getBlogs);
+router.get("/published", blogController.getPublishedBlogs);
+router.get("/unpublished", blogController.getNotPublishedBlogs);
 router.get("/:id", blogController.getBlogDetail);
 router.post(
   "/",

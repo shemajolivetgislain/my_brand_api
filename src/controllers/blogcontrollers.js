@@ -198,6 +198,33 @@ class blogController {
       errorFunc(res, messageContent, status);
     }
   }
+
+  static async getPublishedBlogs(req, res) {
+    try {
+      const blogs = await Blog.find({ statuse: "published" }); // Add filter object
+      res.status(200).json({
+        countPublished: blogs.length,
+        data: blogs,
+      });
+    } catch (error) {
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
+  }
+  static async getNotPublishedBlogs(req, res) {
+    try {
+      const blogs = await Blog.find({ statuse: "Not published" }); // Add filter object
+      res.status(200).json({
+        countUnPublished: blogs.length,
+        data: blogs,
+      });
+    } catch (error) {
+      const messageContent = error.message;
+      const status = 500;
+      errorFunc(res, messageContent, status);
+    }
+  }
 }
 
 export default blogController;
